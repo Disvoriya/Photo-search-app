@@ -2,15 +2,11 @@
 
 import { List, ListItem } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import type { PageLinks } from '../Header'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-type Props = {
-    links: PageLinks
-}
 
-export default function DesktopMenu({ links }: Props) {
+export default function NoneMenu() {
     const theme = useTheme()
     const router = useRouter()
 
@@ -25,21 +21,6 @@ export default function DesktopMenu({ links }: Props) {
                 </button>
                 <h1 className="text-xl sm:text-2xl font-bold text-[#292F36] ml-3">Фото Выставка</h1>
             </div>
-            <List
-                sx={{
-                    display: { xs: 'none', sm: 'flex' },
-                    justifyContent: 'flex-end',
-                    paddingInline: theme.spacing(1)
-                }}
-            >
-                {links.map((link, i) => (
-                    <ListItem key={i}>
-                        <Link href={link.href}>
-                            {link.title}
-                        </Link>
-                    </ListItem>
-                ))}
-            </List>
         </>
     )
 }

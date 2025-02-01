@@ -30,3 +30,17 @@ body, p, span, div, button, input, textarea {
   font-family: 'PT Sans', sans-serif;
   color: #292F36;
 }
+
+input {
+  color: #CDA274;
+  border: none;
+  border-bottom: gray 2px solid;
+  background-color: transparent;
+}
+
+input:hover,
+input:focus,
+input:active{
+  outline:none!important;
+  background: none!important;
+}
