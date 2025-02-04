@@ -25,7 +25,6 @@ function LoginForm() {
         const data = await res.json();
 
         if (res.ok) {
-            localStorage.setItem("token", data.token);
             alert("Авторизация успешна!");
             router.push("/home");
         } else {
@@ -61,7 +60,7 @@ function LoginForm() {
                             onChange={handleChange}
                         />
                     </div>
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    {error && <p className="text-error text-sm">{error}</p>}
                     <Link href="/register" className="block mt-2 text-sm text-white hover:none">
                         Еще нет учетной записи?
                     </Link>

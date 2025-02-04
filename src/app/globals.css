@@ -44,3 +44,15 @@ input:active{
   outline:none!important;
   background: none!important;
 }
+
+.text-error{
+  color: #C76904;
+}
+
+.input-field {
+  @apply w-full px-4 py-3 rounded-lg bg-[#F4F0EC] text-[#CDA274] 
+         placeholder-[#CDA274] focus:outline-none focus:ring-2 focus:ring-[#CDA274];
+}
+
+
+
