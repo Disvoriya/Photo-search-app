@@ -25,7 +25,6 @@ function LoginForm() {
         const data = await res.json();
 
         if (res.ok) {
-            alert("Авторизация успешна!");
             router.push("/home");
         } else {
             setError(data.error || "Ошибка авторизации");

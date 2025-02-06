@@ -38,7 +38,6 @@ function RegisterForm() {
         });
 
         if (res.ok) {
-            alert("Регистрация успешна!");
             router.push("/login");
         } else {
             setErrors({ ...errors, email: "Ошибка регистрации!" });

@@ -10,6 +10,7 @@ function ChangePasswordForm() {
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +44,7 @@ function ChangePasswordForm() {
             }
 
             setSuccess("Пароль успешно изменен.");
+            setIsSubmitted(true);
             setForm({ password: "", confirmPassword: "" });
         } catch (err) {
             if (err instanceof Error) {
@@ -53,28 +55,36 @@ function ChangePasswordForm() {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        router.push("/login");
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("/api/user/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+            });
+
+            router.push("/login");
+        } catch (err) {
+            console.error("Ошибка при выходе:", err);
+        }
     };
 
     const handleDeleteAccount = async () => {
         const confirmDelete = window.confirm("Вы уверены, что хотите удалить аккаунт? Это действие необратимо.");
         if (!confirmDelete) return;
-    
+
         try {
             const response = await fetch("/api/user/delete-account", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
             });
-    
+
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message || "Ошибка при удалении аккаунта.");
             }
-    
-            alert("Аккаунт успешно удален.");
+
             router.push("/");
         } catch (err) {
             alert(err instanceof Error ? err.message : "Неизвестная ошибка.");
@@ -86,39 +96,42 @@ function ChangePasswordForm() {
             <div className="p-8 w-1/2 max-w-md">
                 <h2 className="text-2xl font-bold mb-4">Смена пароля</h2>
                 <hr className="border-t border-gray-300 mb-4" />
-                <form onSubmit={handleSubmit} className="space-y-4 mb-4">
-                    <div>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Пароль"
-                            value={form.password}
-                            onChange={handleChange}
-                            className="input-field border-none"
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            placeholder="Повторите пароль"
-                            value={form.confirmPassword}
-                            onChange={handleChange}
-                            className="input-field border-none"
-                        />
-                    </div>
-                    {error && <p className="text-sm text-error">{error}</p>}
-                    {success && <p className="text-sm text-[#CDA274]">{success}</p>}
-                    <button
-                        type="submit"
-                        className="px-4 py-3 text-white bg-[#CDA274] rounded-lg shadow-md hover:bg-[#b07c58] transition flex items-center justify-center gap-2"
-                    >
-                        Сменить →
-                    </button>
-                </form>
-                <h2 className="text-2xl font-bold text-[#929C9A] mb-4"  onClick={handleDeleteAccount}>Удалить аккаунт</h2>
+                {!isSubmitted ? (
+                    <form onSubmit={handleSubmit} className="space-y-4 mb-4">
+                        <div>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Пароль"
+                                value={form.password}
+                                onChange={handleChange}
+                                className="input-field border-none"
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Повторите пароль"
+                                value={form.confirmPassword}
+                                onChange={handleChange}
+                                className="input-field border-none"
+                            />
+                        </div>
+                        {error && <p className="text-sm text-error">{error}</p>}
+                        <button
+                            type="submit"
+                            className="px-4 py-3 text-white bg-[#CDA274] rounded-lg shadow-md hover:bg-[#b07c58] transition flex items-center justify-center gap-2"
+                        >
+                            Сменить →
+                        </button>
+                    </form>
+                ) : (
+                    <h3 className="text-sm text-[#CDA274] mb-4">{success}</h3>
+                )}
+                <h2 className="text-2xl font-bold text-[#929C9A] mb-4" onClick={handleDeleteAccount}>Удалить аккаунт</h2>
                 <h2 className="text-2xl font-bold text-[#929C9A] mb-4 hover:cursor-default" onClick={handleLogout}>Выйти</h2>
             </div>
             <div className="w-1/2 items-end flex">
